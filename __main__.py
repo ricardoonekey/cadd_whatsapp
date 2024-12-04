@@ -1,5 +1,3 @@
-from os import abort
-
 import psycopg2
 from flask import Flask, request, jsonify
 from datetime import datetime
@@ -58,6 +56,19 @@ def insert_interaction():
                 (payload['engagement_id'], datetime.now())
             )
             return jsonify(insertion_id)
+        except Exception as e:
+            return f"There was an error: {e}", 500
+
+@app.route(rule="/update_whatsapp_flag", methods=["POST"])
+def update_whatsapp_flag():
+    if request.method == "POST":
+        payload = request.get_json()
+        try:
+            execute_query(
+                "UPDATE whatsapp_requests SET whatsapp_requested = TRUE WHERE id = %s",
+                (payload['id'],)
+            )
+            return "Whatsapp flag updated to TRUE", 200
         except Exception as e:
             return f"There was an error: {e}", 500
 
