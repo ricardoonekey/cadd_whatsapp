@@ -9,8 +9,10 @@ WORKDIR /app
 
 # Copy the dependencies file to the working directory
 COPY requirements.txt .
+COPY config.ini .
 
 # Install any dependencies
+RUN apk add postgresql-dev gcc python3-dev musl-dev
 RUN pip install -r requirements.txt
 
 # Copy the content of the local src directory to the working directory
